@@ -1,0 +1,51 @@
+PHP and NGINX installation & configuration in Ubuntu**
+
+Step 1) Disable the services
+sudo service php[v]-fpm stop;
+sudo service nginx stop;
+Step 2) Add repositories
+sudo add-apt-repository ppa:ondrej/php; # additional ENTER will be required
+sudo add-apt-repository ppa:ondrej/nginx-mainline; # additional ENTER will be required
+sudo add-apt-repository ppa:ondrej/nginx; # additional ENTER will be required
+sudo apt update;
+
+Step 3) Update & Uninstall Nginx
+sudo apt --only-upgrade install nginx;
+3.1) uninstall Nginx
+		sudo apt purge nginx nginx-common nginx-core
+ 
+Step 4) Remove PHP (old) packages
+sudo apt remove php[v]*;
+Uninstall PHP:
+Sudo apt-get purge ‘php*’;
+ 
+Step 5) Install PHP packages
+sudo apt -y install php[v]-fpm php[v]-bcmath php[v]-common php[v]-dev php[v]-json php[v]-readline php[v]-bz2 php[v]-curl php[v]-mbstring php[v]-pgsql php[v]-zip php[v]-gd php[v]-xml;
+Step 6) Configure Nginx:
+File: /etc/nginx/conf.d/php-fpm.conf
+change 7.x to [v] for fastcgi_pass unix:/run/php/php[v]-fpm.sock;
+Other nginx configuration will remain same, if you already have properly configured Nginx in your system
+Step 7) Configure PHP:
+File: /etc/php/[v]/fpm/php.ini (make changes for these 3 variables)
+cgi.fix_pathinfo=0    # do not forgot to uncomment this line, i.e. remove ; at the beginning
+max_execution_time = 3600
+memory_limit = 4096M
+File: /etc/php/[v]/fpm/pool.d/www.conf (make changes for these 3 variables)
+user = your_username # for my system it is 'saptarshi'
+group = your_username
+
+listen.owner = your_username
+listen.group = your_username
+Step 8) Start the services
+sudo service php[v]-fpm start;
+sudo service nginx start;
+# please update the start.sh script (if you have any)
+
+Step 9) Install and Configure Nginx
+	   Install Nginx
+         sudo apt install nginx
+         Configure Nginx[file:nginx.config]
+         Change 1) change user ‘www-data’ to <username>
+         Change 2) GOTO ..
+
+
